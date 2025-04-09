@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMax - Tu experiencia cinematográfica</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>CineMax</h1>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#cartelera">Cartelera</a></li>
+                <li><a href="#proximamente">Próximamente</a></li>
+                <li><a href="#promociones">Promociones</a></li>
+                <li><a href="#salas">Nuestras Salas</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn-primary">Iniciar Sesión</button>
+                <button class="btn-secondary">Registrarse</button>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Bienvenido a la magia del cine</h1>
+            <p>Las mejores películas, el mejor sonido y la mejor experiencia visual</p>
+            <button class="btn-cta">Comprar Entradas</button>
+        </div>
+        <div class="trailer-overlay">
+            <i class="fas fa-play-circle"></i>
+            <span>Ver Trailer</span>
+        </div>
+    </section>
+
+    <section id="cartelera" class="movies-section">
+        <div class="section-header">
+            <h2>En Cartelera</h2>
+            <div class="filter-options">
+                <button class="filter-btn active">Todos</button>
+                <button class="filter-btn">Estrenos</button>
+                <button class="filter-btn">Acción</button>
+                <button class="filter-btn">Comedia</button>
+                <button class="filter-btn">Drama</button>
+            </div>
+        </div>
+        
+        <div class="movies-grid">
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="/api/placeholder/300/450" alt="Película 1">
+                    <div class="movie-overlay">
+                        <button class="btn-tickets">Comprar</button>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>Aventuras Extremas</h3>
+                    <div class="movie-meta">
+                        <span class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half"></i>
+                        </span>
+                        <span class="duration">120 min</span>
+                    </div>
+                    <span class="genre">Acción/Aventura</span>
+                </div>
+            </div>
+            
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="/api/placeholder/300/450" alt="Película 2">
+                    <div class="movie-overlay">
+                        <button class="btn-tickets">Comprar</button>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>El Misterio del Lago</h3>
+                    <div class="movie-meta">
+                        <span class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                        <span class="duration">115 min</span>
+                    </div>
+                    <span class="genre">Suspense/Drama</span>
+                </div>
+            </div>
+            
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="/api/placeholder/300/450" alt="Película 3">
+                    <div class="movie-overlay">
+                        <button class="btn-tickets">Comprar</button>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>Risas Aseguradas</h3>
+                    <div class="movie-meta">
+                        <span class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                        <span class="duration">98 min</span>
+                    </div>
+                    <span class="genre">Comedia</span>
+                </div>
+            </div>
+            
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="/api/placeholder/300/450" alt="Película 4">
+                    <div class="movie-overlay">
+                        <button class="btn-tickets">Comprar</button>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>Historias del Futuro</h3>
+                    <div class="movie-meta">
+                        <span class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="duration">142 min</span>
+                    </div>
+                    <span class="genre">Ciencia Ficción</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-footer">
+            <button class="btn-secondary">Ver toda la cartelera</button>
+        </div>
+    </section>
+
+    <section class="promo-banner">
+        <div class="promo-content">
+            <h2>Jueves de 2x1</h2>
+            <p>Disfruta de tu película favorita con un acompañante por el precio de una entrada</p>
+            <button class="btn-cta">Ver promociones</button>
+        </div>
+    </section>
+
+    <section id="proximamente" class="coming-soon">
+        <div class="section-header">
+            <h2>Próximamente</h2>
+        </div>
+        
+        <div class="coming-soon-slider">
+            <div class="coming-soon-item">
+                <div class="movie-poster">
+                    <img src="/api/placeholder/300/450" alt="Próximo estreno 1">
+                    <div class="release-date">
+                        <span>28 ABR</span>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>Universo Desconocido</h3>
+                    <p class="movie-description">Una épica aventura intergaláctica que desafía los límites de lo conocido.</p>
+                    <button class="btn-secondary">Recordármelo</button>
+                </div>
+            </div>
+            
+            <div class="coming-soon-item">
+                <div class="movie-poster">
+                    <img src="/api/placeholder/300/450" alt="Próximo estreno 2">
+                    <div class="release-date">
+                        <span>15 MAY</span>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>Pasiones Ocultas</h3>
+                    <p class="movie-description">Un drama apasionante sobre secretos familiares y redención.</p>
+                    <button class="btn-secondary">Recordármelo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="salas" class="cinema-experience">
+        <div class="section-header">
+            <h2>Una experiencia única</h2>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h3>Pantallas 4K</h3>
+                <p>Disfruta de imágenes con una resolución cuatro veces superior al Full HD.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+                <h3>Sonido Dolby Atmos</h3>
+                <p>Sumérgete en un audio envolvente con tecnología de última generación.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-couch"></i>
+                </div>
+                <h3>Butacas Premium</h3>
+                <p>Máximo confort con nuestras butacas reclinables y amplias.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3>Snack Bar Gourmet</h3>
+                <p>Palomitas artesanales y una selección de alimentos y bebidas premium.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="promociones" class="membership">
+        <div class="membership-content">
+            <h2>Hazte socio y disfruta de ventajas exclusivas</h2>
+            <ul class="benefits-list">
+                <li><i class="fas fa-check-circle"></i> Descuentos en todas las entradas</li>
+                <li><i class="fas fa-check-circle"></i> Preestrenos exclusivos</li>
+                <li><i class="fas fa-check-circle"></i> 2x1 todos los miércoles</li>
+                <li><i class="fas fa-check-circle"></i> Cumpleaños: entrada y combo gratis</li>
+            </ul>
+            <button class="btn-cta">Únete ahora</button>
+        </div>
+        <div class="membership-image">
+            <img src="/api/placeholder/500/300" alt="Tarjeta de socio">
+        </div>
+    </section>
+
+    <section id="contacto" class="contact-section">
+        <div class="section-header">
+            <h2>Contacto</h2>
+        </div>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Av. del Cine 123, Ciudad Cinematográfica</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <p>+34 123 456 789</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <p>info@cinemax.com</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <p>Lun-Dom: 14:00h - 00:00h</p>
+                </div>
+                
+                <div class="social-media">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Asunto</label>
+                    <input type="text" id="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Enviar mensaje</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>CineMax</h2>
+                <p>Tu experiencia cinematográfica</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>CineMax</h3>
+                    <ul>
+                        <li><a href="#">Sobre nosotros</a></li>
+                        <li><a href="#">Trabaja con nosotros</a></li>
+                        <li><a href="#">Salas</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#">Preguntas frecuentes</a></li>
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Síguenos</h3>
+                    <div class="social-media">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 CineMax. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

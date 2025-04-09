@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Búsqueda - CineMax</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos para el header y navegación */
+        header {
+            background-color: var(--black);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+/* Estilos para el encabezado de búsqueda */
+.search-header {
+    text-align: center;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    position: relative;
+    
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.search-header h2 {
+    color: var(--white);
+    font-size: 2.2rem;
+    margin: 0;
+    padding: 1.5rem 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* Efecto de iluminación sutil */
+.search-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(9, 24, 229, 0.15) 0%,
+        rgba(10, 10, 10, 0) 70%
+    );
+    pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-header {
+        margin: 0 1rem 2rem;
+        padding: 1.5rem 0;
+    }
+    
+    .search-header h2 {
+        font-size: 1.6rem;
+        padding: 1rem;
+        line-height: 1.4;
+    }
+    
+    .search-query {
+        display: block;
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .search-query::after {
+        bottom: -1px;
+        height: 1px;
+    }
+}
+        .logo {
+            flex: 0 0 auto;
+        }
+
+        .logo h1 {
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+            order: 3;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-menu li a {
+            color: var(--light-gray);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex: 0 0 auto;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-buttons.hidden {
+            opacity: 0;
+            transform: translateX(20px);
+            pointer-events: none;
+        }
+
+        /* Estilos para el contenedor de búsqueda */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+        }
+
+        .search-toggle {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .search-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .search-form {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            background-color: var(--black);
+            border-radius: 25px;
+        }
+
+        .search-form.active {
+            width: 300px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .search-input {
+            padding: 10px 15px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-size: 0.9rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-button {
+            background: none;
+            border: none;
+            color: var(--white);
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .search-button:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 1024px) {
+            nav {
+                gap: 1.5rem;
+            }
+
+            .nav-menu {
+                gap: 1.5rem;
+            }
+
+            .search-form.active {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem 0;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                margin: 1rem 0;
+            }
+
+            .search-container {
+                width: 100%;
+                margin: 1rem 0;
+                justify-content: center;
+            }
+
+            .search-form.active {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                    <h1>CineMax</h1>
+                </a>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#cartelera">Cartelera</a></li>
+                <li><a href="index.html#proximamente">Próximamente</a></li>
+                <li><a href="index.html#promociones">Promociones</a></li>
+                <li><a href="index.html#salas">Nuestras Salas</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="login.html" class="btn-primary">Iniciar Sesión</a>
+                <a href="register.html" class="btn-secondary">Registrarse</a>
+            </div>
+            <div class="search-container">
+                <button class="search-toggle" aria-label="Buscar">
+                    <i class="fas fa-search"></i>
+                </button>
+                <form class="search-form" action="resultados_busqueda.html" method="GET">
+                    <input type="search" name="query" class="search-input" placeholder="Buscar películas..." required>
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+    <section class="search-results">
+        <div class="search-header">
+            <h2>Resultados de búsqueda para: <span class="search-query" id="search-query"></span></h2>
+        </div>
+        <div id="search-results-container" class="movies-grid">
+            <!-- Los resultados se cargarán aquí dinámicamente -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>CineMax</h2>
+                <p>Tu experiencia cinematográfica</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>CineMax</h3>
+                    <ul>
+                        <li><a href="#">Sobre nosotros</a></li>
+                        <li><a href="#">Trabaja con nosotros</a></li>
+                        <li><a href="#">Salas</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#">Preguntas frecuentes</a></li>
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Síguenos</h3>
+                    <div class="social-media">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 CineMax. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener el término de búsqueda de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('query');
+            
+            // Mostrar el término de búsqueda en la página
+            const searchQueryElement = document.getElementById('search-query');
+            if (searchQueryElement && query) {
+                searchQueryElement.textContent = query;
+            }
+
+            // Configuración de la API
+            const apiKey = 'c0840fb5f5f8687cea8b594994cedca5';
+            const language = 'es-ES';
+            const imageBaseUrl = 'https://image.tmdb.org/t/p/w500/';
+            const baseApiUrl = 'https://api.themoviedb.org/3';
+            
+            // Endpoint para búsqueda de películas
+            const searchEndpoint = `${baseApiUrl}/search/movie?api_key=${apiKey}&language=${language}&query=${encodeURIComponent(query)}`;
+            
+            // Contenedor de resultados
+            const resultsContainer = document.getElementById('search-results-container');
+
+            // Función para mostrar las películas
+            function displayMovies(movies) {
+                if (!resultsContainer) return;
+                resultsContainer.innerHTML = '';
+
+                if (!movies || movies.length === 0) {
+                    resultsContainer.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-film"></i>
+                            <h3>No se encontraron películas</h3>
+                            <p>Intenta con otros términos de búsqueda</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                movies.forEach(movie => {
+                    if (movie.poster_path) {
+                        const movieCard = document.createElement('div');
+                        movieCard.classList.add('movie-card');
+                        const posterUrl = imageBaseUrl + movie.poster_path;
+
+                        movieCard.innerHTML = `
+                            <div class="movie-poster">
+                                <img src="${posterUrl}" alt="${movie.title}" loading="lazy">
+                                <div class="movie-overlay">
+                                    <button class="btn-tickets" data-movie-title="${encodeURIComponent(movie.title)}">Ver Detalles</button>
+                                </div>
+                            </div>
+                            <div class="movie-info">
+                                <h3>${movie.title}</h3>
+                                <div class="movie-meta">
+                                    <span class="rating">
+                                        <i class="fas fa-star"></i> ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+                                    </span>
+                                </div>
+                                <span class="genre">${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'}</span>
+                            </div>
+                        `;
+                        resultsContainer.appendChild(movieCard);
+                    }
+                });
+
+                // Agregar event listeners a los botones de "Ver Detalles"
+                attachTicketModalListeners();
+            }
+
+            // Función para mostrar el modal de compra de entradas
+            function showTicketModal(movieTitle) {
+                const modal = document.createElement('div');
+                modal.className = 'ticket-modal';
+                modal.innerHTML = `
+                    <div class="ticket-modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2>Comprar entradas para "${movieTitle}"</h2>
+                        <div class="ticket-form">
+                            <p>En una implementación real, aquí iría un formulario para seleccionar fecha, hora, asientos, etc.</p>
+                            <div class="ticket-actions">
+                                <button class="btn-primary continue-purchase">Continuar con la compra</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                // Estilos del modal
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.9)';
+                modal.style.display = 'flex';
+                modal.style.justifyContent = 'center';
+                modal.style.alignItems = 'center';
+                modal.style.zIndex = '2000';
+
+                const modalContent = modal.querySelector('.ticket-modal-content');
+                modalContent.style.backgroundColor = '#222';
+                modalContent.style.padding = '30px';
+                modalContent.style.borderRadius = '6px';
+                modalContent.style.width = '90%';
+                modalContent.style.maxWidth = '600px';
+                modalContent.style.position = 'relative';
+                modalContent.style.color = '#fff';
+
+                const closeButton = modal.querySelector('.close-modal');
+                closeButton.style.position = 'absolute';
+                closeButton.style.top = '10px';
+                closeButton.style.right = '15px';
+                closeButton.style.fontSize = '24px';
+                closeButton.style.cursor = 'pointer';
+                closeButton.style.color = '#fff';
+
+                // Cerrar modal
+                const closeModal = () => {
+                    if (document.body.contains(modal)) {
+                        document.body.removeChild(modal);
+                    }
+                };
+
+                closeButton.addEventListener('click', closeModal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+
+                // Acción del botón de compra
+                const continueButton = modal.querySelector('.continue-purchase');
+                if (continueButton) {
+                    continueButton.addEventListener('click', function() {
+                        alert(`Compra simulada para "${movieTitle}". En una implementación real, continuaría el proceso de compra.`);
+                        closeModal();
+                    });
+                }
+            }
+
+            // Función para agregar event listeners a los botones de "Ver Detalles"
+            function attachTicketModalListeners() {
+                const buyButtons = document.querySelectorAll('.btn-tickets');
+                buyButtons.forEach(button => {
+                    const movieTitle = button.dataset.movieTitle;
+                    const clickHandler = (e) => {
+                        e.preventDefault();
+                        const decodedTitle = decodeURIComponent(movieTitle);
+                        showTicketModal(decodedTitle);
+                    };
+                    button.addEventListener('click', clickHandler);
+                });
+            }
+
+            // Función para buscar películas
+            async function searchMovies() {
+                if (!query) {
+                    resultsContainer.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-search"></i>
+                            <h3>Ingresa un término de búsqueda</h3>
+                        </div>
+                    `;
+                    return;
+                }
+
+                try {
+                    const response = await fetch(searchEndpoint);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    displayMovies(data.results);
+                } catch (error) {
+                    console.error('Error al buscar películas:', error);
+                    resultsContainer.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <h3>Error al cargar los resultados</h3>
+                            <p>Por favor, intenta de nuevo más tarde</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Iniciar la búsqueda
+            searchMovies();
+        });
+    </script>
+    <script>
+        // Toggle search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchToggle = document.querySelector('.search-toggle');
+            const searchForm = document.querySelector('.search-form');
+            const searchInput = document.querySelector('.search-input');
+            const navButtons = document.querySelector('.nav-buttons');
+
+            searchToggle.addEventListener('click', function() {
+                searchForm.classList.toggle('active');
+                navButtons.classList.toggle('hidden');
+                if (searchForm.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+
+            // Close search when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!searchForm.contains(event.target) && !searchToggle.contains(event.target)) {
+                    searchForm.classList.remove('active');
+                    navButtons.classList.remove('hidden');
+                }
+            });
+
+            // Handle form submission
+            searchForm.addEventListener('submit', function(e) {
+                if (!searchInput.value.trim()) {
+                    e.preventDefault();
+                } else {
+                    navButtons.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

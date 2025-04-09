@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMax - Tu experiencia cinematográfica</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos para el header y navegación */
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background-color 0.3s ease;
+        }
+
+        header.scrolled {
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            flex: 0 0 auto;
+        }
+
+        .logo h1 {
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+            order: 3;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-menu li a {
+            color: var(--light-gray);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex: 0 0 auto;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-buttons.hidden {
+            opacity: 0;
+            transform: translateX(20px);
+            pointer-events: none;
+        }
+
+        /* Estilos para el contenedor de búsqueda */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+        }
+
+        .search-toggle {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .search-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .search-form {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            background-color: var(--black);
+            border-radius: 25px;
+        }
+
+        .search-form.active {
+            width: 300px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .search-input {
+            padding: 10px 15px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-size: 0.9rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-button {
+            background: none;
+            border: none;
+            color: var(--white);
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .search-button:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 1024px) {
+            nav {
+                gap: 1.5rem;
+            }
+
+            .nav-menu {
+                gap: 1.5rem;
+            }
+
+            .search-form.active {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem 0;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                margin: 1rem 0;
+            }
+
+            .search-container {
+                width: 100%;
+                margin: 1rem 0;
+                justify-content: center;
+            }
+
+            .search-form.active {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Estilos para el hero section */
+        .hero {
+            position: relative;
+            height: 80vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('img/posters/hero.png') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 5%;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .trailer-overlay {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .trailer-overlay:hover {
+            transform: scale(1.05);
+        }
+
+        .trailer-overlay i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 60vh;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .trailer-overlay {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* Estilos para la sección de géneros */
+        .genres-section {
+            padding: 1rem 5%;
+            background-color: var(--black);
+        }
+
+        .genres-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            justify-content: center;
+        }
+
+        .genre-card {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            color: var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .genre-card:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .genre-card.active {
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                    <h1>CineMax</h1>
+                </a>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#cartelera">Cartelera</a></li>
+                <li><a href="#proximamente">Próximamente</a></li>
+                <li><a href="#promociones">Promociones</a></li>
+                <li><a href="#salas">Nuestras Salas</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="login.html" class="btn-primary">Iniciar Sesión</a>
+                <a href="register.html" class="btn-secondary">Registrarse</a>
+            </div>
+            <div class="search-container">
+                <button class="search-toggle" aria-label="Buscar">
+                    <i class="fas fa-search"></i>
+                </button>
+                <form class="search-form" action="resultados_busqueda.html" method="GET">
+                    <input type="search" name="query" class="search-input" placeholder="Buscar películas..." required>
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Bienvenido a la magia del cine</h1>
+            <p>Las mejores películas, el mejor sonido y la mejor experiencia visual</p>
+            <button class="btn-cta">Comprar Entradas</button>
+        </div>
+        <div class="trailer-overlay">
+            <i class="fas fa-play-circle"></i>
+            <span>Ver Trailer</span>
+        </div>
+    </section>
+
+    <section class="genres-section">
+        <div class="section-header">
+            <h2>Géneros</h2>
+        </div>
+        <div class="genres-grid" id="genres-container">
+            <!-- Los géneros se cargarán dinámicamente -->
+        </div>
+    </section>
+
+    <section id="cartelera" class="movies-section">
+        <div class="section-header">
+            <h2>En Cartelera</h2>
+        </div>
+        
+        <div id="cartelera-peliculas" class="movies-grid">
+            <!-- Las películas se cargarán dinámicamente -->
+        </div>
+    </section>
+
+    <section class="promo-banner">
+        <div class="promo-content">
+            <h2>Jueves de 2x1</h2>
+            <p>Disfruta de tu película favorita con un acompañante por el precio de una entrada</p>
+            <button class="btn-cta">Ver promociones</button>
+        </div>
+    </section>
+
+    <section id="proximamente" class="coming-soon">
+        <div class="section-header">
+            <h2>Próximamente</h2>
+        </div>
+        
+        <div class="coming-soon-slider">
+            <div class="coming-soon-item">
+                <div class="movie-poster">
+                    <img src="img/posters/Mission- Impossible - Dead Reckoning Part One (2023).jpg" alt="Próximo estreno 1">
+                    <div class="release-date">
+                        <span>28 ABR</span>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>Mission: Impossible - Dead Reckoning Part One (2023)</h3>
+                    <p class="movie-description">Una épica aventura intergaláctica que desafía los límites de lo conocido.</p>
+                    <button class="btn-secondary">Recordármelo</button>
+                </div>
+            </div>
+            
+            <div class="coming-soon-item">
+                <div class="movie-poster">
+                    <img src="img/posters/Magazine Dreams (2025).jpg" alt="Próximo estreno 2">
+                    <div class="release-date">
+                        <span>15 MAY</span>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h3>Magazine Dreams (2025)</h3>
+                    <p class="movie-description">Un drama apasionante sobre secretos familiares y redención.</p>
+                    <button class="btn-secondary">Recordármelo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="salas" class="cinema-experience">
+        <div class="section-header">
+            <h2>Una experiencia única</h2>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h3>Pantallas 4K</h3>
+                <p>Disfruta de imágenes con una resolución cuatro veces superior al Full HD.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+                <h3>Sonido Dolby Atmos</h3>
+                <p>Sumérgete en un audio envolvente con tecnología de última generación.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-couch"></i>
+                </div>
+                <h3>Butacas Premium</h3>
+                <p>Máximo confort con nuestras butacas reclinables y amplias.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3>Snack Bar Gourmet</h3>
+                <p>Palomitas artesanales y una selección de alimentos y bebidas premium.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="promociones" class="membership">
+        <div class="membership-content">
+            <h2>Hazte socio y disfruta de ventajas exclusivas</h2>
+            <ul class="benefits-list">
+                <li><i class="fas fa-check-circle"></i> Descuentos en todas las entradas</li>
+                <li><i class="fas fa-check-circle"></i> Preestrenos exclusivos</li>
+                <li><i class="fas fa-check-circle"></i> 2x1 todos los miércoles</li>
+                <li><i class="fas fa-check-circle"></i> Cumpleaños: entrada y combo gratis</li>
+            </ul>
+            <button class="btn-cta">Únete ahora</button>
+        </div>
+        <div class="membership-image">
+            <svg width="300" height="180" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Fondo principal metálico -->
+                <rect width="300" height="180" rx="15" fill="url(#metalBackground)"/>
+                
+                <!-- Banda lateral metálica -->
+                <rect x="20" y="25" width="60" height="130" rx="10" fill="url(#metalBand)"/>
+                
+                <!-- Diseño decorativo -->
+                <circle cx="220" cy="50" r="35" fill="#F5A623" fill-opacity="0.6"/>
+                <circle cx="80" cy="130" r="25" fill="#F5A623" fill-opacity="0.4"/>
+                
+                <!-- Texto principal -->
+                <text x="110" y="50" font-family="Arial" font-weight="bold" font-size="16" fill="#FFFFFF">
+                  CineMax
+                </text>
+                <text x="110" y="80" font-family="Arial" font-weight="bold" font-size="36" fill="#FFFFFF">
+                  Socio
+                </text>
+                
+                <!-- Detalles del miembro -->
+                <text x="110" y="110" font-family="Arial" font-size="14" fill="#FFFFFF">
+                  Wilson Calle Baca
+                </text>
+                <text x="110" y="130" font-family="Arial" font-weight="bold" font-size="12" fill="#FFFFFF">
+                  Oro
+                </text>
+              
+                <!-- Definiciones de gradientes -->
+                <defs>
+                  <!-- Gradiente fondo metálico -->
+                  <linearGradient id="metalBackground" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#7d7d7d"/>
+                    <stop offset="40%" stop-color="#c9c9c9"/>
+                    <stop offset="70%" stop-color="#a0a0a0"/>
+                    <stop offset="100%" stop-color="#5a5a5a"/>
+                  </linearGradient>
+              
+                  <!-- Gradiente banda metálica -->
+                  <linearGradient id="metalBand" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#d4d4d4"/>
+                    <stop offset="50%" stop-color="#f0f0f0"/>
+                    <stop offset="100%" stop-color="#bdbdbd"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+        </div>
+        
+    </section>
+
+    <section id="contacto" class="contact-section">
+        <div class="section-header">
+            <h2>Contacto</h2>
+        </div>
+        
+        <div class="contact-container">
+            <div class="contact-details">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Av. del Cine 123, Ciudad Cinematográfica</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <p>+34 123 456 789</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>info@cinemax.com</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <p>Lun-Dom: 14:00h - 00:00h</p>
+                    </div>
+                    
+                    <div class="social-media">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-map">
+                    <!-- Placeholder for map -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086718354021!2d-122.4194154846815!3d37.77492957975889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808c1c7a1007%3A0x4a4b1d5b4b9b5f9!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2ses!4v1678886400000!5m2!1sen!2ses" 
+                        width="100%" 
+                        height="300" 
+                        style="border:0; border-radius: 8px;"
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+
+            <form class="contact-form">
+                <h3>Envíanos un mensaje</h3>
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Asunto</label>
+                    <input type="text" id="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Enviar mensaje</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>CineMax</h2>
+                <p>Tu experiencia cinematográfica</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>CineMax</h3>
+                    <ul>
+                        <li><a href="#">Sobre nosotros</a></li>
+                        <li><a href="#">Trabaja con nosotros</a></li>
+                        <li><a href="#">Salas</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#">Preguntas frecuentes</a></li>
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Síguenos</h3>
+                    <div class="social-media">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 CineMax. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Toggle search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchToggle = document.querySelector('.search-toggle');
+            const searchForm = document.querySelector('.search-form');
+            const searchInput = document.querySelector('.search-input');
+            const navButtons = document.querySelector('.nav-buttons');
+
+            searchToggle.addEventListener('click', function() {
+                searchForm.classList.toggle('active');
+                navButtons.classList.toggle('hidden');
+                if (searchForm.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+
+            // Close search when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!searchForm.contains(event.target) && !searchToggle.contains(event.target)) {
+                    searchForm.classList.remove('active');
+                    navButtons.classList.remove('hidden');
+                }
+            });
+
+            // Handle form submission
+            searchForm.addEventListener('submit', function(e) {
+                if (!searchInput.value.trim()) {
+                    e.preventDefault();
+                } else {
+                    navButtons.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Configuración de la API
+        const API_KEY = 'c0840fb5f5f8687cea8b594994cedca5';
+        const BASE_URL = 'https://api.themoviedb.org/3';
+        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+        const NOW_PLAYING_ENDPOINT = `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=es-ES`;
+        const GENRES_ENDPOINT = `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=es-ES`;
+
+        // Función para cargar géneros
+        async function loadGenres() {
+            try {
+                const response = await fetch(GENRES_ENDPOINT);
+                const data = await response.json();
+                const genresContainer = document.getElementById('genres-container');
+                
+                if (data.genres && data.genres.length > 0) {
+                    genresContainer.innerHTML = data.genres.map(genre => `
+                        <div class="genre-card" data-genre-id="${genre.id}">
+                            ${genre.name}
+                        </div>
+                    `).join('');
+
+                    // Agregar event listeners a las tarjetas de género
+                    document.querySelectorAll('.genre-card').forEach(card => {
+                        card.addEventListener('click', () => {
+                            // Remover clase active de todos los botones
+                            document.querySelectorAll('.genre-card').forEach(btn => {
+                                btn.classList.remove('active');
+                            });
+                            // Agregar clase active al botón clickado
+                            card.classList.add('active');
+                            
+                            const genreId = card.dataset.genreId;
+                            loadMoviesByGenre(genreId);
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar géneros:', error);
+            }
+        }
+
+        // Función para cargar películas en cartelera
+        async function loadNowPlayingMovies() {
+            try {
+                const response = await fetch(NOW_PLAYING_ENDPOINT);
+                const data = await response.json();
+                const moviesContainer = document.getElementById('cartelera-peliculas');
+                
+                if (data.results && data.results.length > 0) {
+                    moviesContainer.innerHTML = data.results.map(movie => `
+                        <div class="movie-card">
+                            <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}">
+                            <div class="movie-info">
+                                <h3>${movie.title}</h3>
+                                <div class="movie-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>${movie.vote_average.toFixed(1)}</span>
+                                </div>
+                                <button class="btn-primary ver-detalles" data-movie-id="${movie.id}">
+                                    Ver Detalles
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Agregar event listeners a los botones de ver detalles
+                    document.querySelectorAll('.ver-detalles').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const movieId = button.dataset.movieId;
+                            showTicketModal(movieId);
+                        });
+                    });
+                } else {
+                    moviesContainer.innerHTML = '<p>No hay películas en cartelera en este momento.</p>';
+                }
+            } catch (error) {
+                console.error('Error al cargar películas:', error);
+                moviesContainer.innerHTML = '<p>Error al cargar las películas. Por favor, intente más tarde.</p>';
+            }
+        }
+
+        // Función para cargar películas por género
+        async function loadMoviesByGenre(genreId) {
+            const endpoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=es-ES&with_genres=${genreId}`;
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                const moviesContainer = document.getElementById('cartelera-peliculas');
+                
+                if (data.results && data.results.length > 0) {
+                    moviesContainer.innerHTML = data.results.map(movie => `
+                        <div class="movie-card">
+                            <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}">
+                            <div class="movie-info">
+                                <h3>${movie.title}</h3>
+                                <div class="movie-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>${movie.vote_average.toFixed(1)}</span>
+                                </div>
+                                <button class="btn-primary ver-detalles" data-movie-id="${movie.id}">
+                                    Ver Detalles
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Agregar event listeners a los botones de ver detalles
+                    document.querySelectorAll('.ver-detalles').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const movieId = button.dataset.movieId;
+                            showTicketModal(movieId);
+                        });
+                    });
+                } else {
+                    moviesContainer.innerHTML = '<p>No hay películas disponibles en este género.</p>';
+                }
+            } catch (error) {
+                console.error('Error al cargar películas por género:', error);
+                moviesContainer.innerHTML = '<p>Error al cargar las películas. Por favor, intente más tarde.</p>';
+            }
+        }
+
+        // Cargar géneros y películas al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGenres();
+            loadNowPlayingMovies();
+        });
+    </script>
+</body>
+</html>

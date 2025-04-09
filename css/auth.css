@@ -1,0 +1,176 @@
+/* css/auth.css */
+
+/* Inherits variables from styles.css */
+
+.auth-page {
+    display: flex;
+    flex-direction: column; /* Stack header/footer and form */
+    justify-content: center; /* Center form vertically */
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    padding: 80px 20px 40px; /* Add top padding for header, bottom for footer */
+    background: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.8)), url('../img/backgrounds/cinema-seats-blurry.jpg') no-repeat center center/cover;
+    /* Consider replacing placeholder image */
+    background-attachment: fixed; /* Keep background static on scroll */
+}
+
+.auth-form-container {
+    background-color: rgba(31, 31, 31, 0.95); /* Slightly transparent dark background */
+    padding: 45px 40px; /* More padding */
+    border-radius: var(--radius); /* Use variable from styles.css */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 430px;
+    text-align: center;
+    border-top: 5px solid var(--primary-color);
+    margin: auto 0; /* Vertical centering */
+    backdrop-filter: blur(3px); /* Optional: Frosted glass effect if background allows */
+}
+
+.auth-form-container h2 {
+    color: var(--white);
+    margin-bottom: 40px; /* More space below heading */
+    font-size: 2.3em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.auth-form .form-group {
+    margin-bottom: 28px; /* Increased spacing */
+    text-align: left;
+    position: relative; 
+}
+
+.auth-form label {
+    display: block;
+    color: var(--text-medium, #ccc); /* Use variable, fallback */
+    margin-bottom: 10px; /* More space below label */
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 15px 18px; /* Comfortable padding */
+    background-color: var(--light-bg, #333); /* Use variable, fallback */
+    border: 1px solid #555; /* Darker border */
+    border-radius: var(--radius); /* Use variable */
+    color: var(--text-light, #eaeaea); /* Use variable, fallback */
+    font-size: 1em;
+    transition: var(--transition); /* Use variable */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--primary-light); /* Use variable */
+    background-color: #444; /* Slightly lighter on focus */
+    box-shadow: 0 0 0 3px rgba(97, 126, 250, 0.3); /* Use primary-light for focus ring */
+}
+
+/* Style placeholders */
+.auth-form input::placeholder {
+    color: var(--text-dark, #999); /* Use variable, fallback */
+    opacity: 0.6;
+}
+
+.auth-form .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -10px; /* Pull up slightly */
+    margin-bottom: 35px; /* More space below */
+    font-size: 0.9em;
+}
+
+.auth-form .form-options label {
+    display: flex; 
+    align-items: center;
+    color: var(--text-medium, #ccc);
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+}
+
+.auth-form .form-options input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: var(--primary-color); 
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.auth-form .form-options a {
+    color: var(--primary-light);
+    text-decoration: none;
+}
+
+.auth-form .form-options a:hover {
+    text-decoration: underline;
+    color: var(--white);
+}
+
+/* Auth form button */
+.auth-form button.btn-primary {
+    width: 100%;
+    padding: 16px; /* Larger button */
+    font-size: 1.15em;
+    margin-top: 15px; /* Space above button */
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.switch-auth {
+    margin-top: 40px; /* More space */
+    color: var(--text-medium, #ccc);
+    font-size: 1em;
+}
+
+.switch-auth a {
+    color: var(--secondary-color, #F5A623); /* Use variable, fallback */
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.switch-auth a:hover {
+    color: #ffca6e; /* Lighter accent on hover */
+    text-decoration: underline;
+}
+
+/* Responsive adjustments for auth pages */
+@media (max-width: 480px) {
+    .auth-form-container {
+        padding: 35px 25px;
+        border-top-width: 4px;
+    }
+
+    .auth-form-container h2 {
+        font-size: 1.9em;
+        margin-bottom: 30px;
+    }
+
+    .auth-form input[type="text"],
+    .auth-form input[type="email"],
+    .auth-form input[type="password"] {
+        padding: 14px 15px;
+    }
+
+     .auth-form .form-options {
+        font-size: 0.85em;
+        flex-direction: column; /* Stack options */
+        align-items: flex-start; /* Align left */
+        gap: 10px; /* Space when stacked */
+    }
+
+    .auth-form button.btn-primary {
+        padding: 14px;
+        font-size: 1.1em;
+    }
+    .switch-auth {
+        font-size: 0.95em;
+    }
+} 
