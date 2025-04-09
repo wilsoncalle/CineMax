@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Películas por Género - CineMax</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos para el header y navegación */
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background-color 0.3s ease;
+        }
+
+        header.scrolled {
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            flex: 0 0 auto;
+        }
+
+        .logo h1 {
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+            order: 3;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-menu li a {
+            color: var(--light-gray);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex: 0 0 auto;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-buttons.hidden {
+            opacity: 0;
+            transform: translateX(20px);
+            pointer-events: none;
+        }
+
+        /* Estilos para el contenedor de búsqueda */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+        }
+
+        .search-toggle {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .search-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .search-form {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            background-color: var(--black);
+            border-radius: 25px;
+        }
+
+        .search-form.active {
+            width: 300px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .search-input {
+            padding: 10px 15px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-size: 0.9rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-button {
+            background: none;
+            border: none;
+            color: var(--white);
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .search-button:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 1024px) {
+            nav {
+                gap: 1.5rem;
+            }
+
+            .nav-menu {
+                gap: 1.5rem;
+            }
+
+            .search-form.active {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem 0;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                margin: 1rem 0;
+            }
+
+            .search-container {
+                width: 100%;
+                margin: 1rem 0;
+                justify-content: center;
+            }
+
+            .search-form.active {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Estilos para el hero section */
+        .hero {
+            position: relative;
+            height: 80vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('img/posters/hero.png') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 5%;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .trailer-overlay {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .trailer-overlay:hover {
+            transform: scale(1.05);
+        }
+
+        .trailer-overlay i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 60vh;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .trailer-overlay {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* Estilos para la sección de géneros */
+        .genres-section {
+            padding: 1rem 5%;
+            background-color: var(--black);
+        }
+
+        .genres-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            justify-content: center;
+        }
+
+        .genre-card {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            color: var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .genre-card:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .genre-card.active {
+            background-color: var(--primary-color);
+        }
+
+        /* Estilos para las tarjetas de películas */
+        .movie-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--dark-gray);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-poster {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card:hover .movie-poster img {
+            transform: scale(1.05);
+        }
+
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .btn-tickets {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-tickets:hover {
+            background-color: var(--primary-color-dark);
+            transform: scale(1.05);
+        }
+
+        .movie-info {
+            padding: 1rem;
+            background-color: var(--dark-gray);
+        }
+
+        .movie-info h3 {
+            color: var(--white);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .rating {
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .rating i {
+            color: #FFD700;
+        }
+
+        .genre {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Estilos para el modal de tickets */
+        .ticket-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ticket-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--dark-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .genre-header {
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .genre-header h2 {
+            color: var(--white);
+            font-size: 2.2rem;
+            margin: 0;
+            padding: 1.5rem 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                    <h1>CineMax</h1>
+                </a>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#cartelera">Cartelera</a></li>
+                <li><a href="index.html#proximamente">Próximamente</a></li>
+                <li><a href="index.html#promociones">Promociones</a></li>
+                <li><a href="index.html#salas">Nuestras Salas</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="login.html" class="btn-primary">Iniciar Sesión</a>
+                <a href="register.html" class="btn-secondary">Registrarse</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="genre-results">
+        <div class="genre-header">
+            <h2>Películas de <span id="genre-name"></span></h2>
+        </div>
+        <div id="genre-movies" class="movies-grid">
+            <!-- Las películas se cargarán dinámicamente -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>CineMax</h2>
+                <p>Tu experiencia cinematográfica</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>CineMax</h3>
+                    <ul>
+                        <li><a href="#">Sobre nosotros</a></li>
+                        <li><a href="#">Trabaja con nosotros</a></li>
+                        <li><a href="#">Salas</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#">Preguntas frecuentes</a></li>
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Síguenos</h3>
+                    <div class="social-media">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 CineMax. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener el ID del género de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const genreId = urlParams.get('id');
+            const genreName = urlParams.get('name');
+            
+            // Mostrar el nombre del género en la página
+            const genreNameElement = document.getElementById('genre-name');
+            if (genreNameElement && genreName) {
+                genreNameElement.textContent = genreName;
+            }
+
+            // Configuración de la API
+            const API_KEY = 'c0840fb5f5f8687cea8b594994cedca5';
+            const BASE_URL = 'https://api.themoviedb.org/3';
+            const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+            
+            // Endpoint para películas por género
+            const genreEndpoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=es-ES&with_genres=${genreId}`;
+            
+            // Contenedor de resultados
+            const moviesContainer = document.getElementById('genre-movies');
+
+            // Función para cargar películas por género
+            async function loadGenreMovies() {
+                try {
+                    const response = await fetch(genreEndpoint);
+                    const data = await response.json();
+                    
+                    if (data.results && data.results.length > 0) {
+                        moviesContainer.innerHTML = data.results.map(movie => `
+                            <div class="movie-card">
+                                <div class="movie-poster">
+                                    <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}" loading="lazy">
+                                    <div class="movie-overlay">
+                                        <button class="btn-tickets" data-movie-title="${encodeURIComponent(movie.title)}">Ver Detalles</button>
+                                    </div>
+                                </div>
+                                <div class="movie-info">
+                                    <h3>${movie.title}</h3>
+                                    <div class="movie-meta">
+                                        <span class="rating">
+                                            <i class="fas fa-star"></i> ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+                                        </span>
+                                        <span class="genre">${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+
+                        // Agregar event listeners a los botones de ver detalles
+                        document.querySelectorAll('.btn-tickets').forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                const movieTitle = decodeURIComponent(button.dataset.movieTitle);
+                                showTicketModal(movieTitle);
+                            });
+                        });
+                    } else {
+                        moviesContainer.innerHTML = `
+                            <div class="no-results">
+                                <i class="fas fa-film"></i>
+                                <h3>No se encontraron películas en este género</h3>
+                                <p>Intenta con otro género</p>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Error al cargar películas:', error);
+                    moviesContainer.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <h3>Error al cargar los resultados</h3>
+                            <p>Por favor, intenta de nuevo más tarde</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Función para mostrar el modal de tickets
+            function showTicketModal(movieTitle) {
+                const modal = document.createElement('div');
+                modal.className = 'ticket-modal';
+                modal.innerHTML = `
+                    <div class="ticket-modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2>Comprar entradas para "${movieTitle}"</h2>
+                        <div class="ticket-form">
+                            <p>En una implementación real, aquí iría un formulario para seleccionar fecha, hora, asientos, etc.</p>
+                            <div class="ticket-actions">
+                                <button class="btn-primary continue-purchase">Continuar con la compra</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                // Estilos del modal
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.9)';
+                modal.style.display = 'flex';
+                modal.style.justifyContent = 'center';
+                modal.style.alignItems = 'center';
+                modal.style.zIndex = '2000';
+
+                const modalContent = modal.querySelector('.ticket-modal-content');
+                modalContent.style.backgroundColor = '#222';
+                modalContent.style.padding = '30px';
+                modalContent.style.borderRadius = '6px';
+                modalContent.style.width = '90%';
+                modalContent.style.maxWidth = '600px';
+                modalContent.style.position = 'relative';
+                modalContent.style.color = '#fff';
+
+                const closeButton = modal.querySelector('.close-modal');
+                closeButton.style.position = 'absolute';
+                closeButton.style.top = '10px';
+                closeButton.style.right = '15px';
+                closeButton.style.fontSize = '24px';
+                closeButton.style.cursor = 'pointer';
+                closeButton.style.color = '#fff';
+
+                // Cerrar modal
+                const closeModal = () => {
+                    if (document.body.contains(modal)) {
+                        document.body.removeChild(modal);
+                    }
+                };
+
+                closeButton.addEventListener('click', closeModal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+
+                // Acción del botón de compra
+                const continueButton = modal.querySelector('.continue-purchase');
+                if (continueButton) {
+                    continueButton.addEventListener('click', function() {
+                        alert(`Compra simulada para "${movieTitle}". En una implementación real, continuaría el proceso de compra.`);
+                        closeModal();
+                    });
+                }
+            }
+
+            // Iniciar la carga de películas
+            loadGenreMovies();
+        });
+    </script>
+</body>
+</html> 

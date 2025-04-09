@@ -311,6 +311,143 @@
         .genre-card.active {
             background-color: var(--primary-color);
         }
+
+        /* Estilos para las tarjetas de películas */
+        .movie-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--dark-gray);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-poster {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card:hover .movie-poster img {
+            transform: scale(1.05);
+        }
+
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .btn-tickets {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-tickets:hover {
+            background-color: var(--primary-color-dark);
+            transform: scale(1.05);
+        }
+
+        .movie-info {
+            padding: 1rem;
+            background-color: var(--dark-gray);
+        }
+
+        .movie-info h3 {
+            color: var(--white);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .rating {
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .rating i {
+            color: #FFD700;
+        }
+
+        .genre {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Estilos para el modal de tickets */
+        .ticket-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ticket-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--dark-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -639,6 +776,29 @@
         </div>
     </footer>
 
+    <div class="ticket-modal" id="ticketModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>Comprar Entradas</h2>
+            <p>Selecciona la cantidad de entradas:</p>
+            <div class="ticket-options">
+                <div class="ticket-type">
+                    <label>Adulto</label>
+                    <input type="number" min="0" value="0">
+                </div>
+                <div class="ticket-type">
+                    <label>Niño</label>
+                    <input type="number" min="0" value="0">
+                </div>
+                <div class="ticket-type">
+                    <label>Senior</label>
+                    <input type="number" min="0" value="0">
+                </div>
+            </div>
+            <button class="btn-primary" id="confirmPurchase">Confirmar Compra</button>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
     <script>
         // Toggle search functionality
@@ -691,6 +851,78 @@
         const NOW_PLAYING_ENDPOINT = `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=es-ES`;
         const GENRES_ENDPOINT = `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=es-ES`;
 
+        // Función para mostrar el modal de tickets
+        function showTicketModal(movieTitle) {
+            const modal = document.createElement('div');
+            modal.className = 'ticket-modal';
+            modal.innerHTML = `
+                <div class="ticket-modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Comprar entradas para "${movieTitle}"</h2>
+                    <div class="ticket-form">
+                        <p>En una implementación real, aquí iría un formulario para seleccionar fecha, hora, asientos, etc.</p>
+                        <div class="ticket-actions">
+                            <button class="btn-primary continue-purchase">Continuar con la compra</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Estilos del modal
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.9)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            modal.style.zIndex = '2000';
+
+            const modalContent = modal.querySelector('.ticket-modal-content');
+            modalContent.style.backgroundColor = '#222';
+            modalContent.style.padding = '30px';
+            modalContent.style.borderRadius = '6px';
+            modalContent.style.width = '90%';
+            modalContent.style.maxWidth = '600px';
+            modalContent.style.position = 'relative';
+            modalContent.style.color = '#fff';
+
+            const closeButton = modal.querySelector('.close-modal');
+            closeButton.style.position = 'absolute';
+            closeButton.style.top = '10px';
+            closeButton.style.right = '15px';
+            closeButton.style.fontSize = '24px';
+            closeButton.style.cursor = 'pointer';
+            closeButton.style.color = '#fff';
+
+            // Cerrar modal
+            const closeModal = () => {
+                if (document.body.contains(modal)) {
+                    document.body.removeChild(modal);
+                }
+            };
+
+            closeButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Acción del botón de compra
+            const continueButton = modal.querySelector('.continue-purchase');
+            if (continueButton) {
+                continueButton.addEventListener('click', function() {
+                    alert(`Compra simulada para "${movieTitle}". En una implementación real, continuaría el proceso de compra.`);
+                    closeModal();
+                });
+            }
+        }
+
         // Función para cargar géneros
         async function loadGenres() {
             try {
@@ -708,15 +940,9 @@
                     // Agregar event listeners a las tarjetas de género
                     document.querySelectorAll('.genre-card').forEach(card => {
                         card.addEventListener('click', () => {
-                            // Remover clase active de todos los botones
-                            document.querySelectorAll('.genre-card').forEach(btn => {
-                                btn.classList.remove('active');
-                            });
-                            // Agregar clase active al botón clickado
-                            card.classList.add('active');
-                            
                             const genreId = card.dataset.genreId;
-                            loadMoviesByGenre(genreId);
+                            const genreName = card.textContent.trim();
+                            window.location.href = `genero.html?id=${genreId}&name=${encodeURIComponent(genreName)}`;
                         });
                     });
                 }
@@ -735,25 +961,30 @@
                 if (data.results && data.results.length > 0) {
                     moviesContainer.innerHTML = data.results.map(movie => `
                         <div class="movie-card">
-                            <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}">
+                            <div class="movie-poster">
+                                <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}" loading="lazy">
+                                <div class="movie-overlay">
+                                    <button class="btn-tickets" data-movie-title="${encodeURIComponent(movie.title)}">Ver Detalles</button>
+                                </div>
+                            </div>
                             <div class="movie-info">
                                 <h3>${movie.title}</h3>
-                                <div class="movie-rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>${movie.vote_average.toFixed(1)}</span>
+                                <div class="movie-meta">
+                                    <span class="rating">
+                                        <i class="fas fa-star"></i> ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+                                    </span>
+                                    <span class="genre">${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'}</span>
                                 </div>
-                                <button class="btn-primary ver-detalles" data-movie-id="${movie.id}">
-                                    Ver Detalles
-                                </button>
                             </div>
                         </div>
                     `).join('');
 
                     // Agregar event listeners a los botones de ver detalles
-                    document.querySelectorAll('.ver-detalles').forEach(button => {
-                        button.addEventListener('click', () => {
-                            const movieId = button.dataset.movieId;
-                            showTicketModal(movieId);
+                    document.querySelectorAll('.btn-tickets').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const movieTitle = decodeURIComponent(button.dataset.movieTitle);
+                            showTicketModal(movieTitle);
                         });
                     });
                 } else {
@@ -761,47 +992,6 @@
                 }
             } catch (error) {
                 console.error('Error al cargar películas:', error);
-                moviesContainer.innerHTML = '<p>Error al cargar las películas. Por favor, intente más tarde.</p>';
-            }
-        }
-
-        // Función para cargar películas por género
-        async function loadMoviesByGenre(genreId) {
-            const endpoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=es-ES&with_genres=${genreId}`;
-            try {
-                const response = await fetch(endpoint);
-                const data = await response.json();
-                const moviesContainer = document.getElementById('cartelera-peliculas');
-                
-                if (data.results && data.results.length > 0) {
-                    moviesContainer.innerHTML = data.results.map(movie => `
-                        <div class="movie-card">
-                            <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}">
-                            <div class="movie-info">
-                                <h3>${movie.title}</h3>
-                                <div class="movie-rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>${movie.vote_average.toFixed(1)}</span>
-                                </div>
-                                <button class="btn-primary ver-detalles" data-movie-id="${movie.id}">
-                                    Ver Detalles
-                                </button>
-                            </div>
-                        </div>
-                    `).join('');
-
-                    // Agregar event listeners a los botones de ver detalles
-                    document.querySelectorAll('.ver-detalles').forEach(button => {
-                        button.addEventListener('click', () => {
-                            const movieId = button.dataset.movieId;
-                            showTicketModal(movieId);
-                        });
-                    });
-                } else {
-                    moviesContainer.innerHTML = '<p>No hay películas disponibles en este género.</p>';
-                }
-            } catch (error) {
-                console.error('Error al cargar películas por género:', error);
                 moviesContainer.innerHTML = '<p>Error al cargar las películas. Por favor, intente más tarde.</p>';
             }
         }
